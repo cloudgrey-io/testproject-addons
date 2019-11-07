@@ -1,2 +1,4 @@
 .idea
 .gradle
+common/io.testproject.sdk.java.jar
+*/build
