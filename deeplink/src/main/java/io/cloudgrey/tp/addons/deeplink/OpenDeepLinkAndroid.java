@@ -15,7 +15,7 @@ public class OpenDeepLinkAndroid implements AndroidAction {
     @Parameter(description = "The deep link URL")
     public String url = "";
 
-    @Parameter(description = "The package of the app for the URL")
+    @Parameter(description = "The package of the app for the URL (optional, will default to the currently-running app)")
     public String pkg = "";
 
     @Override
