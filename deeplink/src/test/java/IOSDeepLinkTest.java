@@ -1,6 +1,6 @@
-import io.appium.java_client.android.AndroidDriver;
-import io.cloudgrey.tp.addons.deeplink.OpenDeepLinkAndroid;
+import io.cloudgrey.tp.addons.deeplink.OpenDeepLinkIOS;
 import io.testproject.java.sdk.v2.Runner;
+import io.testproject.java.sdk.v2.drivers.IOSDriver;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterAll;
@@ -10,23 +10,24 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-class AndroidDeepLinkTest {
+class IOSDeepLinkTest {
     private static final String DEV_TOKEN = System.getenv("TESTPROJECT_DEV_KEY");
-    private static final String DEVICE_UDID = "emulator-5554";
-    private static final String PACKAGE_NAME = "io.cloudgrey.the_app";
-    private static final String ACTIVITY_NAME = ".MainActivity";
+    private static final String DEVICE_UDID = System.getenv("IOS_DEVICE_ID");
+    private static final String DEVICE_NAME = System.getenv("IOS_DEVICE_NAME");
+    private static final String BUNDLE_ID = "io.cloudgrey.the-app";
 
     private static Runner runner;
-    private static AndroidDriver driver;
+    private static IOSDriver driver;
 
     @BeforeAll
     static void setup() throws InstantiationException {
-        runner = Runner.createAndroid(DEV_TOKEN, DEVICE_UDID, PACKAGE_NAME, ACTIVITY_NAME);
+        runner = Runner.createIOS(DEV_TOKEN, DEVICE_UDID, DEVICE_NAME, BUNDLE_ID);
         driver = runner.getDriver();
     }
 
     @AfterAll
     static void tearDown() throws IOException {
+        driver.quit();
         runner.close();
     }
 
@@ -38,7 +39,7 @@ class AndroidDeepLinkTest {
     @Test
     void testOpenDeepLinkAction() throws Exception {
         // Create Action
-        OpenDeepLinkAndroid action = new OpenDeepLinkAndroid();
+        OpenDeepLinkIOS action = new OpenDeepLinkIOS();
         action.url = "theapp://login/alice/mypassword";
 
         // Run action
@@ -46,6 +47,6 @@ class AndroidDeepLinkTest {
 
         // Verify
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@text, \"You are logged in as alice\")]")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//*[contains(@label, \"You are logged in as alice\")]")));
     }
 }

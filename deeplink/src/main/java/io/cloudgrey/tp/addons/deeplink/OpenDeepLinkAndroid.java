@@ -2,6 +2,7 @@ package io.cloudgrey.tp.addons.deeplink;
 
 import com.google.common.collect.ImmutableMap;
 import io.appium.java_client.android.AndroidDriver;
+import io.cloudgrey.tp.addons.helpers.Helpers;
 import io.testproject.java.annotations.v2.Action;
 import io.testproject.java.annotations.v2.Parameter;
 import io.testproject.java.sdk.v2.addons.AndroidAction;
@@ -20,12 +21,12 @@ public class OpenDeepLinkAndroid implements AndroidAction {
 
     @Override
     public ExecutionResult execute(AndroidAddonHelper helper) throws FailureException {
+        Helpers.validateURL(url);
         AndroidDriver driver = helper.getDriver();
         if (pkg.equals("")) {
             pkg = driver.getCurrentPackage();
         }
         driver.terminateApp(pkg);
-        // TODO validate url
         driver.executeScript("mobile: deepLink", ImmutableMap.of(
             "url", url,
             "package", pkg
